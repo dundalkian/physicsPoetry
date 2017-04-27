@@ -6,7 +6,7 @@ import time
 import twitter
 import string
 from tweet import getAPI
-
+from markov import markovModel
 
 
 #testMarkov = open("test.txt" , "wb")
@@ -18,6 +18,9 @@ So I am 90% sure that currently it creates/erases a .txt file. It then runs the 
 named theScript() function which opens that .txt file to append. It then uses somebody else's
 space magic to create a markov chain model based on Emily Dickinson poems, it then spits out
 poems in 10 line groupings every second. 
+
+it doesn't do this anymore
+
 
 Why am I doing this I hear you ask? 
     -answer coming with next update.
@@ -44,7 +47,7 @@ would be cool to have different options for that.
 Yeah Reinhardt, I didn't comment my function, what are you going to do about it now?
 
 .... Okay literally, past Larry, you are a fucking idiot, like this function is fine, but I know you wrote that
-areWords function and that literally makes no sense. Now I have to pick up all the pieces.
+isRhyme function and that literally makes no sense. Now I have to pick up all the pieces.
 '''
 def areWords(str1, str2):
     found1 = False
@@ -65,23 +68,54 @@ def areWords(str1, str2):
         return False
 
 
-def isRhyme(str1, str2):
+def givePhonemeLine(str):
+    strPhoneme = '' #empty string to represent phoneme
+    with open('iphod2.txt', 'r') as rhymes:
+        for lines in rhymes:
+            if str in lines:
+                strPhoneme = lines
+    if strPhoneme == '':
+        raise ValueError('This may not be a word, if it is ... RIP.')
+    return strPhoneme
+
+def iphodArrayFromString(iphodString):
+    iphodArray = iphodString.split("\t")
+    return iphodArray
+
+def phonemeArrayFromArray(iphodInfoArray):
+    phonemeArray = iphodInfoArray[2].split(".")
+    return phonemeArray
+
+
+#pass in only iphod phoneme arrays
+def numSyllablesShared(str1, str2):
+    if str1 = str2:
+        return 'all'
+    if 
+
+#Returns -1 for no apparent rhyme or not words, 0 for identical pronounciation, 1 for apparent rhyme
+def compareRhyme(str1, str2):
     if not areWords(str1, str2):
         print('not words')
-        return False  # eventually should redirect to the psuedowords, but Dickinson uses real words... so, just no.
-    strPhone1 = ''  # Strings representing phonemes
-    strPhone2 = ''
-    with open('iphod2.txt', 'r') as rhymes:
-        # indexStart
-        for lines in rhymes:
-            if str1 in lines:
-                strPhone1 = lines
-            if str2 in lines:
-                strPhone2 = lines
-    indexPhone1 = findIndex(strPhone1, '\t', 3)
-   # print(indexPhone1)
-    indexPhone2 = findIndex(strPhone2, '\t', 3)
-   # print(indexPhone2)
+        return -1  # eventually should redirect to the psuedowords, but Dickinson uses real words... so, just no.
+
+    strPhone1 = givePhonemeLine(str1)  # strings representing phonemes
+    strPhone2 = givePhonemeLine(str2)
+
+    iphodInfoArray1 = iphodArrayFromString(strPhone1)
+    iphodInfoArray2 = iphodArrayFromString(strPhone2)
+
+    phonemeArray1 = phonemeArrayFromArray(iphodInfoArray1)
+    phonemeArray2 = phonemeArrayFromArray(iphodInfoArray2)
+
+    if phonemeArray1 == phonemeArray2:
+        return 0
+    if phonemeArray1[len(phonemeArray1)-1] == phonemeArray2[len(phonemeArray2)-1]:
+
+
+
+
+
 
     #temp takes in phonemes one at a time and works backwards, (gets OW, shit happens, gets K...)
     temp1 = strPhone1[findIndexReverse(strPhone1, '.', indexPhone1):indexPhone1]
@@ -148,23 +182,7 @@ def findIndex(string, subString, n):  # Find index of nth occurence of a string 
     return index
 
 
-def tweetFourLinePoem(api):
-    tweetText = ""
-    with open("hellaPoems.txt") as f:
-        corpusText = f.read()
-
-    markovModel = markovify.NewlineText(corpusText)
-
-    for i in range(4):
-        tweetText = tweetText + markovModel.make_short_sentence(max_chars=34) + "\n"  #34*4 = 136 + 4(\n)
-
-    api.PostUpdate(tweetText)
-
 def makeTwoLines():
-    with open("hellaPoems.txt") as f:
-        corpusText = f.read()
-
-    markovModel = markovify.NewlineText(corpusText)
     Alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
 
     line1 = markovModel.make_short_sentence(max_chars=34)
@@ -217,6 +235,7 @@ def makeTwoLines():
         print('rip')
         return False
 
+'''
 def theScript():
     testMarkov = open("test.txt", "a")
     #testMarkov.write(bytes("Txt to write\n", 'UTF-8'))
@@ -235,12 +254,12 @@ def theScript():
 
 
     testMarkov.close()
+'''
 
-tweetFourLinePoem(getAPI('Preferences.txt'))
+
+#tweetFourLinePoem(getAPI('Preferences.txt'))
 #isRhyme('\tbolt\t', '\tsnow\t')
 #makeTwoLines()
-
-
 
 
 

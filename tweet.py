@@ -5,6 +5,8 @@ import markovify
 import time
 import twitter
 import string
+from markov import markovModel
+
 
 def getAPI(file):
     with open(file, 'r') as prefs:
@@ -26,3 +28,10 @@ def getAPI(file):
                           access_token_secret=textArray[3]
                           )
         return api
+
+def tweetFourLinePoem(api):
+    tweetText = ""
+    for i in range(4):
+        tweetText = tweetText + markovModel.make_short_sentence(max_chars=34) + "\n"  #34*4 = 136 + 4(\n)
+
+    api.PostUpdate(tweetText)
