@@ -18,6 +18,7 @@ poems in 10 line groupings every second.
 
 Why am I doing this I hear you ask? 
     -answer coming with next update.
+    - ............ I just spent 3 hours on code I can't use because it was written so bad
 '''
 
 '''
