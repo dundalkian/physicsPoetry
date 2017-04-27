@@ -2,22 +2,12 @@ import random
 import sys
 import os
 import markovify
-<<<<<<< HEAD
-
-testMarkov = open("test.txt" , "wb")
-testMarkov.write(bytes("Txt to write", 'UTF-8'))
-
-
-
-
-
-
-
-
-
-=======
 import time
 import twitter
+
+#testMarkov = open("test.txt" , "wb")
+#testMarkov.write(bytes("Txt to write", 'UTF-8'))
+
 
 '''
 So I am 90% sure that currently it creates/erases a .txt file. It then runs the aptly
@@ -98,7 +88,6 @@ def theScript():
 
 tweetFourLinePoem()
 
->>>>>>> 36e61bead74909c514192ab94baf4a7b9ba653f0
 
 
 
