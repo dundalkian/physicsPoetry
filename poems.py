@@ -5,6 +5,9 @@ import markovify
 import time
 import twitter
 import string
+from tweet import getAPI
+
+
 
 #testMarkov = open("test.txt" , "wb")
 #testMarkov.write(bytes("Txt to write", 'UTF-8'))
@@ -35,29 +38,13 @@ would be cool to have different options for that.
 (Not important Larry, don't waste time doing this and pretend you accomplished something)
  (^^I know you^^)
 '''
-def getAPI():
-    with open('Preferences.txt', 'r') as prefs:
-        textArray = []
-        lineNum = 0
-        for line in prefs:
-            textArray.append(line)
-            lineNum = lineNum + 1
-        #print(textArray)
-        for i in range(4):
-            indexStart = textArray[i].index('=') + 2
-            textArray[i] = (textArray[i])[indexStart:-2]
-            #print(textArray[i])
 
-
-        api = twitter.Api(consumer_key=textArray[0],
-                          consumer_secret=textArray[1],
-                          access_token_key=textArray[2],
-                          access_token_secret=textArray[3]
-                          )
-        return api
 
 '''
 Yeah Reinhardt, I didn't comment my function, what are you going to do about it now?
+
+.... Okay literally, past Larry, you are a fucking idiot, like this function is fine, but I know you wrote that
+areWords function and that literally makes no sense. Now I have to pick up all the pieces.
 '''
 def areWords(str1, str2):
     found1 = False
@@ -249,17 +236,9 @@ def theScript():
 
     testMarkov.close()
 
-#tweetFourLinePoem(getAPI())
-isRhyme('\tbolt\t', '\tsnow\t')
-makeTwoLines()
-
-test(False)
-def test(x):
-    if x == True:
-        print('YOU DID IT')
-        return True
-    else:
-        return test(makeTwoLines())
+tweetFourLinePoem(getAPI('Preferences.txt'))
+#isRhyme('\tbolt\t', '\tsnow\t')
+#makeTwoLines()
 
 
 
