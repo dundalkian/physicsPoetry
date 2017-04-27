@@ -33,48 +33,85 @@ would be cool to have different options for that.
 (Not important Larry, don't waste time doing this and pretend you accomplished something)
  (^^I know you^^)
 '''
+def getAPI():
+    with open('Preferences.txt', 'r') as prefs:
+        textArray = []
+        lineNum = 0
+        for line in prefs:
+            textArray.append(line)
+            lineNum = lineNum + 1
+        #print(textArray)
+        for i in range(4):
+            indexStart = textArray[i].index('=') + 2
+            textArray[i] = (textArray[i])[indexStart:-2]
+            #print(textArray[i])
 
-with open('Preferences.txt', 'r') as prefs:
-    textArray = []
-    lineNum = 0
-    for line in prefs:
-        textArray.append(line)
-        lineNum = lineNum + 1
-    #print(textArray)
-    for i in range(4):
-        indexStart = textArray[i].index('=') + 2
-        textArray[i] = (textArray[i])[indexStart:-2]
-        #print(textArray[i])
 
+        api = twitter.Api(consumer_key=textArray[0],
+                          consumer_secret=textArray[1],
+                          access_token_key=textArray[2],
+                          access_token_secret=textArray[3]
+                          )
+        return api
 
-    api = twitter.Api(consumer_key=textArray[0],
-                      consumer_secret=textArray[1],
-                      access_token_key=textArray[2],
-                      access_token_secret=textArray[3]
-                      )
-
-def isRhyme(str1, str2):
+'''
+Yeah Reinhardt, I didn't comment my function, what are you going to do about it now?
+'''
+def areWords(str1, str2):
     found1 = False
     found2 = False
-    strPhone1 = '' #Strings representing phonemes
-    strPhone2 = ''
     with open('iphod2.txt', 'r') as rhymes:
         #indexStart
         for lines in rhymes:
             if str1 in lines:
                 found1 = True
-                strPhone1 = lines
             if str2 in lines:
                 found2 = True
+    if found1 & found2:
+        rhymes.close()
+        return True
+    else:
+        #might be a case mismatch also, I honestly don't give a fuck though, deal with it.
+        rhymes.close()
+        return False
+
+
+def isRhyme(str1, str2):
+    if not areWords(str1, str2):
+        return False  # eventually should redirect to the psuedowords, but Dickinson uses real words... so, just no.
+    strPhone1 = ''  # Strings representing phonemes
+    strPhone2 = ''
+    with open('iphod2.txt', 'r') as rhymes:
+        # indexStart
+        for lines in rhymes:
+            if str1 in lines:
+                strPhone1 = lines
+            if str2 in lines:
                 strPhone2 = lines
+    indexPhone1 = findIndex(strPhone1, '\t', 3)
+    indexPhone2 = findIndex(strPhone2, '\t', 3)
 
-    if found1 & found2: #Holy Lit this might actually work
-        print(strPhone1)
-        print(strPhone2)
+    #temp takes in phonemes one at a time and works backwards, (gets OW, shit happens, gets K...)
+    temp1 = strPhone1[:indexPhone1]
+    temp2 =
+
+def findIndexReverse(string, subString, n, start):
+    index = string.find(subString,end=start)  # end is equal to start, idk anymore, kill me soon.
+    while n > 1:
+        indexStart = string.find(subString, index + len(subString))
+        n = n - 1
+    return index
 
 
+def findIndex(string, subString, n):  # Find index of nth occurence of a string within strings
+    index = string.find(subString)
+    while n > 1:
+        indexStart = string.find(subString, index+len(subString))
+        n = n-1
+    return index
 
-def tweetFourLinePoem():
+
+def tweetFourLinePoem(api):
     tweetText = ""
     with open("hellaPoems.txt") as f:
         corpusText = f.read()
@@ -106,8 +143,8 @@ def theScript():
 
     testMarkov.close()
 
-
-isRhyme('Aaron', 'aback')
+tweetFourLinePoem(getAPI())
+isRhyme('\tton\t', 'zuni')
 
 
 
