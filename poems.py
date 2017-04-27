@@ -34,10 +34,10 @@ would be cool to have different options for that.
  (^^I know you^^)
 '''
 
-with open('Preferences.txt', 'r') as pref:
+with open('Preferences.txt', 'r') as prefs:
     textArray = []
     lineNum = 0
-    for line in pref:
+    for line in prefs:
         textArray.append(line)
         lineNum = lineNum + 1
     #print(textArray)
@@ -52,6 +52,27 @@ with open('Preferences.txt', 'r') as pref:
                       access_token_key=textArray[2],
                       access_token_secret=textArray[3]
                       )
+
+def isRhyme(str1, str2):
+    found1 = False
+    found2 = False
+    strPhone1 = '' #Strings representing phonemes
+    strPhone2 = ''
+    with open('iphod2.txt', 'r') as rhymes:
+        #indexStart
+        for lines in rhymes:
+            if str1 in lines:
+                found1 = True
+                strPhone1 = lines
+            if str2 in lines:
+                found2 = True
+                strPhone2 = lines
+
+    if found1 & found2: #Holy Lit this might actually work
+        print(strPhone1)
+        print(strPhone2)
+
+
 
 def tweetFourLinePoem():
     tweetText = ""
@@ -86,7 +107,7 @@ def theScript():
     testMarkov.close()
 
 
-tweetFourLinePoem()
+isRhyme('Aaron', 'aback')
 
 
 
