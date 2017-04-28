@@ -6,6 +6,7 @@ import time
 import twitter
 import string
 from markov import markovModel
+from poems import makeRhymeLines
 
 
 def getAPI(file):
@@ -35,3 +36,15 @@ def tweetFourLinePoem(api):
         tweetText = tweetText + markovModel.make_short_sentence(max_chars=34) + "\n"  #34*4 = 136 + 4(\n)
 
     api.PostUpdate(tweetText)
+
+def tweetFourLineRhymed(api):
+    tweetText = ""
+    part1 = makeRhymeLines()
+    part2 = makeRhymeLines()
+    for i in range(2):
+        tweetText = tweetText + part1[i] + "\n" + part2[i] + "\n"
+        print(tweetText)
+
+    api.PostUpdate(tweetText)
+
+tweetFourLineRhymed(getAPI('Preferences.txt'))

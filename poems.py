@@ -5,7 +5,6 @@ import markovify
 import time
 import twitter
 import string
-from tweet import getAPI
 from markov import markovModel
 
 
@@ -88,15 +87,30 @@ def phonemeArrayFromArray(iphodInfoArray):
 
 
 #pass in only iphod phoneme arrays
-def numSyllablesShared(str1, str2):
-    if str1 = str2:
-        return 'all'
-    if 
+# returns -1 for identical arrays, 0 if no phonemes in common, the number of shared phonemes
+def numPhonemesShared(phoneArray1, phoneArray2):
+    if phoneArray1 == phoneArray2:
+        return -1
+    minPhonemes = -1
+    numPhonemes = 0
+    if len(phoneArray1) >= len(phoneArray2):
+        minPhonemes = len(phoneArray2)
+    if len(phoneArray1) <= len(phoneArray2):
+        minPhonemes = len(phoneArray1)
+
+    for i in range(minPhonemes):
+        if phoneArray1[len(phoneArray1) - 1 - i] == phoneArray2[len(phoneArray2) - 1 - i]:
+            #print('At least on phone')
+            #print(phoneArray1)
+            numPhonemes += 1
+        else:
+            return numPhonemes
+    return numPhonemes
 
 #Returns -1 for no apparent rhyme or not words, 0 for identical pronounciation, 1 for apparent rhyme
 def compareRhyme(str1, str2):
     if not areWords(str1, str2):
-        print('not words')
+        #print('not words')
         return -1  # eventually should redirect to the psuedowords, but Dickinson uses real words... so, just no.
 
     strPhone1 = givePhonemeLine(str1)  # strings representing phonemes
@@ -108,47 +122,21 @@ def compareRhyme(str1, str2):
     phonemeArray1 = phonemeArrayFromArray(iphodInfoArray1)
     phonemeArray2 = phonemeArrayFromArray(iphodInfoArray2)
 
-    if phonemeArray1 == phonemeArray2:
-        return 0
-    if phonemeArray1[len(phonemeArray1)-1] == phonemeArray2[len(phonemeArray2)-1]:
+    phonemesShared = numPhonemesShared(phonemeArray1, phonemeArray2)
 
-
-
-
-
-
-    #temp takes in phonemes one at a time and works backwards, (gets OW, shit happens, gets K...)
-    temp1 = strPhone1[findIndexReverse(strPhone1, '.', indexPhone1):indexPhone1]
-    temp2 = strPhone2[findIndexReverse(strPhone2, '.', indexPhone2):indexPhone2]
-    if temp1 != temp2:
-        print("not the same")
-        return False
-    if isVowel(temp1):
-        temp1 = strPhone1[findIndexReverse(strPhone1, '.', findIndexReverse(strPhone1, '.', indexPhone1)):findIndexReverse(strPhone1, '.', indexPhone1)]
-        temp2 = strPhone2[findIndexReverse(strPhone2, '.', findIndexReverse(strPhone2, '.', indexPhone2)):findIndexReverse(strPhone2, '.', indexPhone2)]
-        print(temp1)
-        if temp1 == '':
-            #print('hello there')
-            temp1 = '.' + strPhone1[findIndexReverse(strPhone1, '\t', findIndexReverse(strPhone1, '.', indexPhone1)) + 1:findIndexReverse(strPhone1, '.', indexPhone1)]
-            print(temp1)
-        if temp1 == '':
-            #print('General')
-            x=0
-        print(temp2)
-        if temp1 != temp2:
-            print('flase')
-            return False
+    if phonemesShared == 0:
+        print(-1)
+        return -1
+    if phonemesShared == 1:
+        if isVowel(phonemeArray1[len(phonemeArray1) - 1]):
+            print(1)
+            return 1
         else:
-            print('True')
-            return True
-    else:
-        temp1 = strPhone1[findIndexReverse(strPhone1, '.', indexPhone1):indexPhone1]
-        temp2 = strPhone2[findIndexReverse(strPhone2, '.', indexPhone2):indexPhone2]
-        if temp1 != temp2:
-            #print("why is it here")
-            return False
-
-
+            print(-1)
+            return -1
+    if phonemesShared > 1:
+        print(1)
+        return 1
 
 def isVowel(str):
     Alpha = 'AEIOU'
@@ -159,6 +147,8 @@ def isVowel(str):
             return True
     #print("not vowel")
     return False
+
+#Not needed
 def findIndexReverse(string, subString, start):
     i = 0
     index = 0
@@ -173,7 +163,7 @@ def findIndexReverse(string, subString, start):
     index = findIndex(string, subString, i)
     return index
 
-
+#Not needed
 def findIndex(string, subString, n):  # Find index of nth occurence of a string within strings
     index = string.find(subString)
     while n > 1:
@@ -182,58 +172,47 @@ def findIndex(string, subString, n):  # Find index of nth occurence of a string 
     return index
 
 
-def makeTwoLines():
-    Alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+def makeRhymeLines():
+    alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+    rhymeResult = -1
+    #line1 = markovModel.make_short_sentence(max_chars=34)
+    #line2 = markovModel.make_short_sentence(max_chars=34)
+    numTries = 0
 
-    line1 = markovModel.make_short_sentence(max_chars=34)
-    line2 = markovModel.make_short_sentence(max_chars=34)
-    print(line1)
+    while rhymeResult == -1:
+        line1 = markovModel.make_short_sentence(max_chars=34)
+        line2 = markovModel.make_short_sentence(max_chars=34)
 
+        line1Array = []
+        for i in range(len(alphabet)):
+            if line1[len(line1) - 1] == alphabet[i]:
+                line1Array = line1.split(" ")
 
-    indexLast1 = findIndexReverse(line1, ' ', len(line1))
-    indexLast2 = findIndexReverse(line2, ' ', len(line2))
+        if len(line1Array) == 0:
+            line1temp = line1[:-1]
+            line1Array = line1temp.split(" ")
 
-    charLast1 = line1[len(line1) - 1:len(line1)]
-    charLast2 = line2[len(line2) - 1:len(line2)]
+        line2Array = []
+        for i in range(len(alphabet)):
+            if line2[len(line2) - 1] == alphabet[i]:
+                line2Array = line2.split(" ")
 
-    endLine1 = len(line1)
-    endLine2 = len(line2)
-    booly1 = False
-    for i in range(len(Alphabet)):
-        booly1 = False
-        if charLast1 == Alphabet[i]:
-            booly1 = True
+        if len(line2Array) == 0:
+            line2temp = line2[:-1]
+            line2Array = line2temp.split(" ")
 
-
-
-    if booly1 == False:
-        endLine1 = endLine1 - 1
-
-    booly2 = False
-    for i in range(len(Alphabet)):
-        booly2 = False
-        if charLast1 == Alphabet[i]:
-            booly2 = True
-
-
-
-    if booly2 == False:
-        endLine2 = endLine2 - 1
+        rhymeResult = compareRhyme('\t'+line1Array[-1]+'\t', '\t'+line2Array[-1]+'\t')
+        numTries += 1
+        if numTries > 100:
+            print('I fucking give up')
+            rhymeResult = 1
 
 
+    print (numTries)
+    return [line1,line2]
 
-    last1 = line1[indexLast1+1:endLine1]
-    print(last1)
-    last2 = line2[indexLast2+1:endLine2]
-    print(last2)
 
-    if isRhyme('\t'+last1+'\t', '\t'+last2+'\t'):
-        print(line1)
-        print(line2)
-        return True
-    else:
-        print('rip')
-        return False
+
 
 '''
 def theScript():
@@ -260,6 +239,6 @@ def theScript():
 #tweetFourLinePoem(getAPI('Preferences.txt'))
 #isRhyme('\tbolt\t', '\tsnow\t')
 #makeTwoLines()
-
+#makeRhymeLines()
 
 
