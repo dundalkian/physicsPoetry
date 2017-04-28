@@ -77,7 +77,7 @@ def iphodArrayFromString(iphodString):
     return iphodArray
 
 def phonemeArrayFromArray(iphodInfoArray):
-    phonemeArray = iphodInfoArray[2].split(".")
+    phonemeArray = iphodInfoArray[3].split(".")
     return phonemeArray
 
 
@@ -95,8 +95,9 @@ def numPhonemesShared(phoneArray1, phoneArray2):
 
     for i in range(minPhonemes):
         if phoneArray1[len(phoneArray1) - 1 - i] == phoneArray2[len(phoneArray2) - 1 - i]:
-            #print('At least on phone')
+           # print('At least one phone')
             #print(phoneArray1)
+            #print(phoneArray2)
             numPhonemes += 1
         else:
             return numPhonemes
@@ -126,7 +127,7 @@ def compareRhyme(str1, str2):
         return -1
     if phonemesShared == 1:
         if isVowel(phonemeArray1[len(phonemeArray1) - 1]):
-            print('hello there')
+            #print('hello there')
             return 1
         else:
             #print(-1)
@@ -177,11 +178,11 @@ def makeRhymeLines():
     numTries = 0
 
     while rhymeResult == -1 or rhymeResult == 0:
-        #line1 = markovModel.make_short_sentence(max_chars=34)
-        #line2 = markovModel.make_short_sentence(max_chars=34)
+        line1 = markovModel.make_short_sentence(max_chars=34)
+        line2 = markovModel.make_short_sentence(max_chars=34)
 
-        line1 = 'me;'
-        line2 = 'yesterday!'
+        #line1 = 'heaven;'
+        #line2 = 'one'
 
         line1Array = []
         for i in range(len(alphabet)):
@@ -202,16 +203,17 @@ def makeRhymeLines():
             line2Array = line2temp.split(" ")
 
         rhymeResult = compareRhyme('\t'+line1Array[-1]+'\t', '\t'+line2Array[-1]+'\t')
-        print(rhymeResult)
+        #print(rhymeResult)
         numTries += 1
 
-        if numTries > 100:
+        if numTries > 100000:
             print('I fucking give up')
             raise ValueError('I am sorry, but I tried so many times I gave up, I am lazy, I know')
 
 
     print (numTries)
     return [line1,line2]
+    #return numTries
 
 
 
@@ -238,8 +240,64 @@ def theScript():
 '''
 
 
+def makeRhymeLinesTest():
+    alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+    rhymeResult = -1
+    line1 = markovModel.make_short_sentence(max_chars=34)
+    #line2 = markovModel.make_short_sentence(max_chars=34)
+    numTries = 0
+
+    while rhymeResult == -1 or rhymeResult == 0:
+        #line1 = markovModel.make_short_sentence(max_chars=34)
+        line2 = markovModel.make_short_sentence(max_chars=34)
+
+        #line1 = 'heaven;'
+        #line2 = 'one'
+
+        line1Array = []
+        for i in range(len(alphabet)):
+            if line1[len(line1) - 1] == alphabet[i]:
+                line1Array = line1.split(" ")
+
+        if len(line1Array) == 0:
+            line1temp = line1[:-1]
+            line1Array = line1temp.split(" ")
+
+        line2Array = []
+        for i in range(len(alphabet)):
+            if line2[len(line2) - 1] == alphabet[i]:
+                line2Array = line2.split(" ")
+
+        if len(line2Array) == 0:
+            line2temp = line2[:-1]
+            line2Array = line2temp.split(" ")
+
+        rhymeResult = compareRhyme('\t'+line1Array[-1]+'\t', '\t'+line2Array[-1]+'\t')
+        #print(rhymeResult)
+        numTries += 1
+
+        if numTries > 100000:
+            print('I fucking give up')
+            raise ValueError('I am sorry, but I tried so many times I gave up, I am lazy, I know')
+
+
+    print (numTries)
+    #return [line1,line2]
+    return numTries
+
 #tweetFourLinePoem(getAPI('Preferences.txt'))
 #isRhyme('\tbolt\t', '\tsnow\t')
 #makeTwoLines()
 
-makeRhymeLines()
+
+
+def testEfficiency():
+    totalTries = 0
+    totalSuccesses = 0
+    while True:
+        totalTries = totalTries + makeRhymeLines()
+        totalSuccesses += 1
+        average = totalTries / totalSuccesses
+        print (average)
+
+testEfficiency()

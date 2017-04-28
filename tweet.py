@@ -47,4 +47,16 @@ def tweetFourLineRhymed(api):
 
     api.PostUpdate(tweetText)
 
-tweetFourLineRhymed(getAPI('Preferences.txt'))
+#tweetFourLineRhymed(getAPI('Preferences.txt'))
+
+def testEfficiency():
+    totalTries = 0
+    totalSuccesses = 0
+    while True:
+        tweetFourLineRhymed(getAPI('Preferences.txt'))
+        print('Done')
+    return True
+
+#tweetFourLineRhymed(getAPI('Preferences.txt'))
+
+testEfficiency()
