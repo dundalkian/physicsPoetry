@@ -17,7 +17,7 @@ need them) This breakdown allows words to be compared and check for rhymes, amon
 
 First creating a model of the corpus (currently Emily Dickinson) 
 
-Takes that model and creates two sentences of up to 34 lines. 
+Takes that model and creates two sentences of up to 34 characters. 
 
 Uses a local version of IPhOD to analyze the phonemes of the last word in each sentence, 
 
