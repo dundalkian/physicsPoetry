@@ -33,7 +33,7 @@ def getAPI(file):
 def tweetFourLinePoem(api):
     tweetText = ""
     for i in range(4):
-        tweetText = tweetText + markovModel.make_short_sentence(max_chars=34) + "\n"  #34*4 = 136 + 4(\n)
+        tweetText = tweetText + markovModel.make_short_sentence(max_chars=34) + "\n"  # 34*4 = 136 + 4(\n)(<-Worst case)
 
     api.PostUpdate(tweetText)
 

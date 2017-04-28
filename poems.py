@@ -13,12 +13,7 @@ from markov import markovModel
 
 
 '''
-So I am 90% sure that currently it creates/erases a .txt file. It then runs the aptly
-named theScript() function which opens that .txt file to append. It then uses somebody else's
-space magic to create a markov chain model based on Emily Dickinson poems, it then spits out
-poems in 10 line groupings every second. 
-
-it doesn't do this anymore
+For some reason "ME" and "YESTERDAY" count as a rhyme FIX THIS!!!!!!!!!!
 
 
 Why am I doing this I hear you ask? 
@@ -124,18 +119,20 @@ def compareRhyme(str1, str2):
 
     phonemesShared = numPhonemesShared(phonemeArray1, phonemeArray2)
 
+    if str1 == str2:
+        return 0
     if phonemesShared == 0:
-        print(-1)
+        #print(-1)
         return -1
     if phonemesShared == 1:
         if isVowel(phonemeArray1[len(phonemeArray1) - 1]):
-            print(1)
+            print('hello there')
             return 1
         else:
-            print(-1)
+            #print(-1)
             return -1
     if phonemesShared > 1:
-        print(1)
+        #print(1)
         return 1
 
 def isVowel(str):
@@ -148,7 +145,7 @@ def isVowel(str):
     #print("not vowel")
     return False
 
-#Not needed
+#Not needed / same as findIndex
 def findIndexReverse(string, subString, start):
     i = 0
     index = 0
@@ -163,7 +160,7 @@ def findIndexReverse(string, subString, start):
     index = findIndex(string, subString, i)
     return index
 
-#Not needed
+#Not needed / defucnt, left in to remind myself what a mank I am
 def findIndex(string, subString, n):  # Find index of nth occurence of a string within strings
     index = string.find(subString)
     while n > 1:
@@ -179,9 +176,12 @@ def makeRhymeLines():
     #line2 = markovModel.make_short_sentence(max_chars=34)
     numTries = 0
 
-    while rhymeResult == -1:
-        line1 = markovModel.make_short_sentence(max_chars=34)
-        line2 = markovModel.make_short_sentence(max_chars=34)
+    while rhymeResult == -1 or rhymeResult == 0:
+        #line1 = markovModel.make_short_sentence(max_chars=34)
+        #line2 = markovModel.make_short_sentence(max_chars=34)
+
+        line1 = 'me;'
+        line2 = 'yesterday!'
 
         line1Array = []
         for i in range(len(alphabet)):
@@ -202,10 +202,12 @@ def makeRhymeLines():
             line2Array = line2temp.split(" ")
 
         rhymeResult = compareRhyme('\t'+line1Array[-1]+'\t', '\t'+line2Array[-1]+'\t')
+        print(rhymeResult)
         numTries += 1
+
         if numTries > 100:
             print('I fucking give up')
-            rhymeResult = 1
+            raise ValueError('I am sorry, but I tried so many times I gave up, I am lazy, I know')
 
 
     print (numTries)
@@ -239,6 +241,5 @@ def theScript():
 #tweetFourLinePoem(getAPI('Preferences.txt'))
 #isRhyme('\tbolt\t', '\tsnow\t')
 #makeTwoLines()
-#makeRhymeLines()
 
-
+makeRhymeLines()
