@@ -5,8 +5,15 @@ import markovify
 import time
 import twitter
 import string
+import json
 from markov import markovModel
 from poems import makeRhymeLines
+
+'''
+REST api for single searches
+
+Use Tweepy or something I give up what the fuck are you doing just commit and go to bed.
+'''
 
 
 def getAPI(file):
@@ -57,6 +64,38 @@ def testEfficiency():
         print('Done')
     return True
 
-#tweetFourLineRhymed(getAPI('Preferences.txt'))
+def giveStatusId(status):
+    statusArray = status.split(",")
+    statusId = statusArray[2]
+    print(statusId)
 
-testEfficiency()
+def replyWithFire():        #This should be the main command basically. (Don't fuck it up Larry)
+    mentions = api.GetMentions()
+    print(mentions[1])
+    print (mentions[1].id)
+
+
+def listen(api):
+    with open('listenOut.txt', 'a') as f:
+        for line in api.GetUserStream():
+            f.write(json.dumps(line))
+            f.write('\n')
+
+
+
+#tweetFourLineRhymed(getAPI('Preferences.txt'))
+api = getAPI('Preferences.txt')
+#replyWithFire()
+
+while True:
+    print(api.GetStreamSample())
+    listen(api)
+
+
+
+
+
+
+
+
+

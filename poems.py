@@ -295,9 +295,8 @@ def testEfficiency():
     totalTries = 0
     totalSuccesses = 0
     while True:
-        totalTries = totalTries + makeRhymeLines()
+        totalTries = totalTries + makeRhymeLinesTest()
         totalSuccesses += 1
         average = totalTries / totalSuccesses
         print (average)
 
-testEfficiency()
