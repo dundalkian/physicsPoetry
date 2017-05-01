@@ -8,7 +8,8 @@ requesting different rhyming formats (Freeform, AABB, ABAB) is possible and will
 
 You can look at the past tweets of the bot and watch it as it gets better at https://twitter.com/physicspoetry
 
-The bot functions using a combination of the Twitter API, Markovify (https://github.com/jsvine/markovify), and IPhOD 2.0
+The bot functions using a combination of the Twitter API (with Python wrapper https://github.com/bear/python-twitter),
+Markovify (https://github.com/jsvine/markovify), and IPhOD 2.0
 (The Irvine Phonotactic Online Dictionary - http://www.iphod.com). IPhOD provides a breakdown of the phonemes (the 
 individual sounds of the word basically) of over 50,000 english words, (And like, a crap ton of fake words if you
 need them) This breakdown allows words to be compared and check for rhymes, among many other cool things.
